@@ -35,7 +35,11 @@ def main():
         help="device file to use",
         metavar="FILE")
     sleep(5)
-    my_xep1 = Xep_data(device_name, FPS, iterations, pulses_per_step, dac_min, dac_max, area_start, area_end)
+    
+    (options, args) = parser.parse_args()
+    
+    
+    my_xep1 = Xep_data(options.device_name, FPS, iterations, pulses_per_step, dac_min, dac_max, area_start, area_end)
     my_xep1.display_sys_info()
     a,b = my_xep1.get_data_matrix(sample_time,save = True)
     my_xep1.plot_frame(a, b, sample_time)
