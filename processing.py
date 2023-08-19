@@ -18,8 +18,7 @@ def plot_heatmap(amp_datamatrix):
 
     extent_matrix = np.zeros((1020,8))
     amp_datamatrix = np.hstack((extent_matrix,amp_datamatrix))
-
-    #将横纵坐标都映射到（0，1）的范围内  
+ 
     extent=(0,1,0,1) 
 
     fig = plt.figure()
@@ -33,16 +32,13 @@ def plot_heatmap(amp_datamatrix):
     ax.set_yticklabels( ('0', '1', '2', '3', '4','5'))
 
     matrix = amp_datamatrix.T
-    matrix = matrix[::-1]        #上下翻转
+    matrix = matrix[::-1]
     im = ax.imshow(matrix,extent=extent,cmap='rainbow')
     plt.colorbar(im)
     plt.show()
     # fig.savefig('heatmap.png',dpi=600)
 
 def plot_amp_datamatrix3D(amp_datamatrix, sampletime, FPS, area_start, area_end):
-    """
-    功能：绘制数据矩阵
-    """
 
     bin_length = 8*1.5e8/23.328e9
 
@@ -98,9 +94,6 @@ def plot_datamatrix3D_multicolor(amp_datamatrix, sampletime, FPS, area_start, ar
 
 
 def plot_frame_animation(amp_matrix, sampletime, FPS, area_start, area_end):
-    """
-    功能：绘制雷达帧动图
-    """
 
     bin_length = 8*1.5e8/23.328e9
     ax_x = np.arange((area_start-1e-5), (area_end-1e-5)+bin_length, bin_length)
@@ -128,9 +121,6 @@ def plot_frame_animation(amp_matrix, sampletime, FPS, area_start, area_end):
 
 
 def get_stdmatrix(amp_matrix):
-    """
-    功能：求信号标准差
-    """
 
     std_matrix = np.zeros(91)
     col = len(amp_matrix[0])
@@ -141,9 +131,6 @@ def get_stdmatrix(amp_matrix):
     return std_matrix
 
 def get_diffmatrix(amp_matrix):
-    """
-    功能：获得一阶时间差分矩阵（变化率）
-    """
     diffmatrix = np.zeros((1020,91))
     for i in range(1019):
         diffmatrix[i] = amp_matrix[i+1] -amp_matrix[i]
@@ -151,9 +138,6 @@ def get_diffmatrix(amp_matrix):
     return diffmatrix
 
 def get_avrmatrix(amp_matrix):
-    """
-    功能：计算平均值矩阵
-    """
     col = len(amp_matrix[0])
     avrmatrix = np.zeros(91)
 
@@ -163,9 +147,6 @@ def get_avrmatrix(amp_matrix):
     return avrmatrix
 
 def get_median_matrix(amp_matrix):
-    """
-    对慢时间序列进行中位数滤波
-    """
     med_matrix = np.zeros((1020,91))
     col = len(amp_matrix[0])
 
@@ -198,13 +179,10 @@ def avrfilter(array,length):
     return result
 
 def plot_peak_animation(amp_datamatrix, sampletime, FPS, area_start, area_end,filtered = False):
-    """
-    功能：绘制峰值动图
-    """
     fs = 17
     N = fs*sampletime
     # N = fs*20
-    deri_datamatrix = get_diffmatrix(amp_datamatrix)    #差分
+    deri_datamatrix = get_diffmatrix(amp_datamatrix)
     index_matrix = []
     peakarea_matrix = np.zeros((1020,13))
     peakdiff_matrix = np.zeros((1020,13))
@@ -220,10 +198,8 @@ def plot_peak_animation(amp_datamatrix, sampletime, FPS, area_start, area_end,fi
         peakdiff_matrix[i] = deri_datamatrix[i][index-6:index+7]
         index_matrix.append(index)
 
-    # """
-    # 调制波
-    # """
-    # derimatrix = np.sign(derimatrix)    #符号函数 1 0 -1
+
+    # derimatrix = np.sign(derimatrix)
     # sqr_wave = derimatrix[:,0] + derimatrix[:,4]
     # sqr_wave[np.where(sqr_wave == 2)[0]] = 1
     # sqr_wave[np.where(sqr_wave == -2)[0]] = -1
@@ -243,9 +219,9 @@ def plot_peak_animation(amp_datamatrix, sampletime, FPS, area_start, area_end,fi
 
 
     if filtered:
-        b, a = signal.butter(8, 0.06, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
+        b, a = signal.butter(8, 0.06, 'lowpass')
         c, d = signal.butter(8, 0.015, 'highpass')
-        filtedData = signal.filtfilt(b, a, avr_matrix)  #data为要过滤的信号
+        filtedData = signal.filtfilt(b, a, avr_matrix)
         filtered_matrix = signal.filtfilt(c, d, filtedData)
 
     # filtered_matrix = np.multiply(filtered_matrix,np.hamming(60*FPS))
@@ -317,9 +293,6 @@ def win_fft(matrix_1d,length,num):
 
 
 def plot_slowtime_profile(amp_datamatrix, bin_start, bin_end, filtered=True):
-    """
-    功能：绘制从bin_start到bin_end条Range Bin的慢时间采样图
-    """
 
     bin_range = np.arange(bin_start, bin_end)
     num = len(bin_range)
@@ -331,9 +304,9 @@ def plot_slowtime_profile(amp_datamatrix, bin_start, bin_end, filtered=True):
     for i in range(num):
         rangebin_data = amp_datamatrix[ : , bin_range[i]]
         if filtered:
-            b, a = signal.butter(8, 0.08, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
+            b, a = signal.butter(8, 0.08, 'lowpass')
             c, d = signal.butter(8, 0.015, 'highpass')
-            filtedData = signal.filtfilt(b, a, rangebin_data)  #data为要过滤的信号
+            filtedData = signal.filtfilt(b, a, rangebin_data)
             rangebin_data = signal.filtfilt(c, d, filtedData)
         sum_matrix += rangebin_data
 
@@ -348,9 +321,6 @@ def plot_slowtime_profile(amp_datamatrix, bin_start, bin_end, filtered=True):
 
 
 def find_peakline(amp_datamatrix):
-    """
-    功能：跟踪目标范围段雷达的峰值，绘制图像
-    """
     peakline_matrix = np.zeros(1020)
     peakline_matrix[0] = np.max(amp_datamatrix[0])
     index = np.where(amp_datamatrix[0]==np.max(amp_datamatrix[0]))[0][0]
@@ -361,9 +331,9 @@ def find_peakline(amp_datamatrix):
         peakline_matrix[i] = np.max(slice_matrix)
         index = np.where(amp_datamatrix[i]==np.max(slice_matrix))[0][0]
 
-    b, a = signal.butter(8, 0.08, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
+    b, a = signal.butter(8, 0.08, 'lowpass')
     c, d = signal.butter(8, 0.015, 'highpass')
-    filtedData = signal.filtfilt(b, a, peakline_matrix)  #data为要过滤的信号
+    filtedData = signal.filtfilt(b, a, peakline_matrix)
     peakline_matrix = signal.filtfilt(c, d, filtedData)
 
     fig = plt.figure()
@@ -402,8 +372,8 @@ def FFT_fasttime(amp_datamatrix, bin_num, FPS, sampletime):
 def lowpass_filter(amp_datamatrix, bin_num, FPS, sampletime):
     rangebin_data = amp_datamatrix[ : , bin_num]
 
-    b, a = signal.butter(8, 0.08, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
-    filtedData = signal.filtfilt(b, a, rangebin_data)  #data为要过滤的信号
+    b, a = signal.butter(8, 0.08, 'lowpass')
+    filtedData = signal.filtfilt(b, a, rangebin_data)
     c, d = signal.butter(8, 0.01, 'highpass')
     filtedData = signal.filtfilt(c, d, filtedData)
 
@@ -445,10 +415,6 @@ def lowpass_filter(amp_datamatrix, bin_num, FPS, sampletime):
 
 
 def subtract_env(amp_datamatrix,FPS):
-
-    """
-    功能：检测雷达帧中有运动的部分
-    """
 
     detect_matrix = amp_datamatrix[0:54,:]
     row_num = detect_matrix.shape[0]
@@ -505,7 +471,7 @@ def plot_std(std_datamatrix):
     threshold_matrix = np.zeros(91)
     max_std = np.max(std_datamatrix)
     index = np.where(std_datamatrix == max_std)[0][0]
-    d_0 = index*bin_length+0.4    # 最高方差点距离
+    d_0 = index*bin_length+0.4
     # p_m = np.sum(std_datamatrix[index-1:index+2])/3
     p_m = max_std
     n = np.mean(std_datamatrix)
@@ -551,9 +517,6 @@ def plot_avr(env_avrmatrix,obj_avrmatrix,sub_avrmatrix):
 
 
 def plot_multi(amp_datamatrix,line1,line2,filtered = False):
-    """
-    功能：绘制从bin_start到bin_end条Range Bin的慢时间采样图
-    """
 
     area_start = 0.4
     area_end = 5
@@ -576,11 +539,11 @@ def plot_multi(amp_datamatrix,line1,line2,filtered = False):
     # data1 = data1 - 5*data2
 
     if filtered:
-        b, a = signal.butter(8, 0.08, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
+        b, a = signal.butter(8, 0.08, 'lowpass')
         c, d = signal.butter(8, 0.015, 'highpass')
-        filtedData = signal.filtfilt(b, a, data1)  #data为要过滤的信号
+        filtedData = signal.filtfilt(b, a, data1)
         data1 = signal.filtfilt(c, d, filtedData)
-        filtedData = signal.filtfilt(b, a, data2_i)  #data为要过滤的信号
+        filtedData = signal.filtfilt(b, a, data2_i)
         data2_i = signal.filtfilt(c, d, filtedData)
 
 
@@ -606,9 +569,6 @@ def plot_multi(amp_datamatrix,line1,line2,filtered = False):
 
 
 def breathmonitor_realtime(amp_datamatrix, bin_num, FPS, sampletime):
-    """
-    实时呼吸监测
-    """
     rangebin_data = amp_datamatrix[ : , bin_num]
     area_start = 0.4
     area_end = 5
@@ -616,8 +576,8 @@ def breathmonitor_realtime(amp_datamatrix, bin_num, FPS, sampletime):
     time_bin = 1/17
     
 
-    b, a = signal.butter(8, 0.08, 'lowpass')   #配置滤波器 8 表示滤波器的阶数,a=2*Wc/Ws
-    filtedData = signal.filtfilt(b, a, rangebin_data)  #data为要过滤的信号
+    b, a = signal.butter(8, 0.08, 'lowpass')
+    filtedData = signal.filtfilt(b, a, rangebin_data)
     c, d = signal.butter(8, 0.01, 'highpass')
     filtedData = signal.filtfilt(c, d, filtedData)
 

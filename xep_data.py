@@ -1,9 +1,5 @@
 # -*- coding:utf-8 -*-
 
-'''
-获得雷达数据帧（baseband）,包括幅度和相位信号
-'''
-
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -29,8 +25,7 @@ class Xep_data(object):
         self.area_start = area_start
         self.area_end = area_end
         self.bin_length = 8*1.5e8/23.328e9
-        self.fast_sample_point = int((self.area_end - self.area_start)/self.bin_length + 2)
-        #类型转换只取整  
+        self.fast_sample_point = int((self.area_end - self.area_start)/self.bin_length + 2) 
 
         self.reset()
 
@@ -79,8 +74,8 @@ class Xep_data(object):
         q_vec = np.array(data[data_length//2:])
         iq_vec = i_vec + 1j*q_vec
 
-        ampli_data = abs(iq_vec)                       #振幅
-        phase_data = np.arctan2(q_vec, i_vec)          #相位
+        ampli_data = abs(iq_vec)
+        phase_data = np.arctan2(q_vec, i_vec)
 
         return ampli_data, phase_data
 
