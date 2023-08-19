@@ -33,6 +33,7 @@ class Xep_data(object):
         self.xep = self.mc.get_xep()
 
         self.sys_init()
+        print "Initalized Successful"
 
 
     def reset(self):
@@ -41,6 +42,7 @@ class Xep_data(object):
         xep.module_reset()
         mc.close()
         sleep(3)
+        print "Reset Successful"
 
     def display_sys_info(self):
         print("FirmWareID =", self.xep.get_system_info(2))
@@ -54,15 +56,23 @@ class Xep_data(object):
     
     def sys_init(self):
         self.xep.x4driver_init()
+        print "Init Successful"
         self.xep.x4driver_set_downconversion(1)
-        
+        print "Downconversion Successful"
         self.xep.x4driver_set_iterations(self.iterations)
+        print "Iterations Set Successful"
         self.xep.x4driver_set_pulses_per_step(self.pulses_per_step)
+        print "Pulses Per Step Set Successful"
         self.xep.x4driver_set_dac_min(self.dac_min)
         self.xep.x4driver_set_dac_max(self.dac_max)
+        print "DAC Min Max Set Successful"
         self.xep.x4driver_set_frame_area_offset(0.18)
+        print "Frame Area Offset Set Successful"
         self.xep.x4driver_set_frame_area(self.area_start, self.area_end)
+        print "Frame Area Set Successful"
         self.xep.x4driver_set_fps(self.FPS)
+        print "FPS Set Successful"
+
 
     def read_apdata(self):
         #read a frame

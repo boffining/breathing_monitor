@@ -20,8 +20,8 @@ sample_time = 70
 slice_time_start = 10
 slice_time_end = sample_time
 
-env_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_env_sampletime70s/amp_matrix.txt')
-obj_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_apart_sampletime70s/amp_matrix.txt')
+#env_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_env_sampletime70s/amp_matrix.txt')
+#obj_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_apart_sampletime70s/amp_matrix.txt')
 
 
 if __name__ == '__main__':
@@ -33,20 +33,22 @@ if __name__ == '__main__':
     # my_xep1.plot_frame(a, b, sample_time)
     # print(a.shape)
 
-    obj_amp_datamatrix = processing.slice_datamatrix(obj_amp_datamatrix, slice_time_start, slice_time_end, FPS)
-    env_amp_datamatrix = processing.slice_datamatrix(env_amp_datamatrix, slice_time_start, slice_time_end, FPS)
-    obj_amp_datamatrix[:,:4] = 0
-    env_amp_datamatrix[:,:4] = 0
-    obj_dif_datamatrix = processing.get_diffmatrix(obj_amp_datamatrix)
-    sub_amp_datamatrix = obj_amp_datamatrix - env_amp_datamatrix
+#     obj_amp_datamatrix = processing.slice_datamatrix(obj_amp_datamatrix, slice_time_start, slice_time_end, FPS)
+#     env_amp_datamatrix = processing.slice_datamatrix(env_amp_datamatrix, slice_time_start, slice_time_end, FPS)
+#     obj_amp_datamatrix[:,:4] = 0
+#     env_amp_datamatrix[:,:4] = 0
+#     obj_dif_datamatrix = processing.get_diffmatrix(obj_amp_datamatrix)
+#     sub_amp_datamatrix = obj_amp_datamatrix - env_amp_datamatrix
+    
     # sub_amp_datamatrix[:,50:60] = 0
-    med_obj_datamatrix = processing.get_median_matrix(sub_amp_datamatrix)
-    std_obj_datamatrix = processing.get_stdmatrix(obj_amp_datamatrix)
-    sub_avr_datamatrix = processing.get_avrmatrix(sub_amp_datamatrix)
-    env_avr_datamatrix = processing.get_avrmatrix(env_amp_datamatrix)
-    obj_avr_datamatrix = processing.get_avrmatrix(obj_amp_datamatrix)
-    sub_min_datamatrix = processing.get_minmatrix(sub_amp_datamatrix)
-    sample_time = sample_time - slice_time_start
+    
+#     med_obj_datamatrix = processing.get_median_matrix(sub_amp_datamatrix)
+#     std_obj_datamatrix = processing.get_stdmatrix(obj_amp_datamatrix)
+#     sub_avr_datamatrix = processing.get_avrmatrix(sub_amp_datamatrix)
+#     env_avr_datamatrix = processing.get_avrmatrix(env_amp_datamatrix)
+#     obj_avr_datamatrix = processing.get_avrmatrix(obj_amp_datamatrix)
+#     sub_min_datamatrix = processing.get_minmatrix(sub_amp_datamatrix)
+#     sample_time = sample_time - slice_time_start
 
 
 
@@ -61,5 +63,9 @@ if __name__ == '__main__':
     # processing.subtract_env(med_obj_datamatrix, FPS)
     # processing.plot_std(std_obj_datamatrix)
     # processing.plot_avr(env_avr_datamatrix,obj_avr_datamatrix,sub_avr_datamatrix)
-    processing.plot_multi(obj_amp_datamatrix,12,27,False)
+    
+    
+#     processing.plot_multi(obj_amp_datamatrix,12,27,False)
+    
+    
     # processing.breathmonitor_realtime(obj_amp_datamatrix, 32, FPS, sample_time)
