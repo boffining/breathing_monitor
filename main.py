@@ -10,7 +10,7 @@ import processing
 device_name = '/dev/ttyACM0'
 FPS = 17
 iterations = 16
-pulses_per_step = 100 #300
+pulses_per_step = 300
 dac_min = 949
 dac_max = 1100
 area_start = 0.4

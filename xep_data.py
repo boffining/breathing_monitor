@@ -10,6 +10,13 @@ import os
 import pymoduleconnector
 from pymoduleconnector import DataType
 
+def reset(device_name):
+    mc = pymoduleconnector.ModuleConnector(device_name)
+    xep = mc.get_xep()
+    xep.module_reset()
+    mc.close()
+    sleep(3)
+
 class Xep_data(object):
 
     def __init__(self, device_name, FPS, iterations, pulses_per_step, dac_min, dac_max, \
@@ -27,7 +34,8 @@ class Xep_data(object):
         self.bin_length = 8*1.5e8/23.328e9
         self.fast_sample_point = int((self.area_end - self.area_start)/self.bin_length + 2) 
 
-        self.reset()
+        #self.reset()
+        reset(self.device_name)
 
         self.mc = pymoduleconnector.ModuleConnector(self.device_name)
         self.xep = self.mc.get_xep()
