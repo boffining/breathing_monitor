@@ -1,3 +1,7 @@
+from __future__ import print_function, division
+
+import sys
+from optparse import OptionParser
 import numpy as np
 from time import sleep
 
@@ -7,7 +11,7 @@ from pymoduleconnector import DataType
 from xep_data import Xep_data
 import processing
 
-device_name = '/dev/ttyACM0'
+# device_name = '/dev/ttyACM0'
 FPS = 17
 iterations = 16
 pulses_per_step = 300
@@ -22,16 +26,29 @@ slice_time_end = sample_time
 
 #env_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_env_sampletime70s/amp_matrix.txt')
 #obj_amp_datamatrix = np.loadtxt('./data/exp8/datamatrix_apart_sampletime70s/amp_matrix.txt')
-
-
-if __name__ == '__main__':
-
+def main():
+    parser = OptionParser()
+    parser.add_option(
+        "-d",
+        "--device",
+        dest="device_name",
+        help="device file to use",
+        metavar="FILE")
     sleep(5)
     my_xep1 = Xep_data(device_name, FPS, iterations, pulses_per_step, dac_min, dac_max, area_start, area_end)
     my_xep1.display_sys_info()
     a,b = my_xep1.get_data_matrix(sample_time,save = True)
     my_xep1.plot_frame(a, b, sample_time)
     print(a.shape)
+
+if __name__ == '__main__':
+    main()
+#     sleep(5)
+#     my_xep1 = Xep_data(device_name, FPS, iterations, pulses_per_step, dac_min, dac_max, area_start, area_end)
+#     my_xep1.display_sys_info()
+#     a,b = my_xep1.get_data_matrix(sample_time,save = True)
+#     my_xep1.plot_frame(a, b, sample_time)
+#     print(a.shape)
 
 #     obj_amp_datamatrix = processing.slice_datamatrix(obj_amp_datamatrix, slice_time_start, slice_time_end, FPS)
 #     env_amp_datamatrix = processing.slice_datamatrix(env_amp_datamatrix, slice_time_start, slice_time_end, FPS)
